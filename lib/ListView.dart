@@ -1,6 +1,8 @@
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:zq_flutter_app/GridView.dart';
+
 
 class CustomListView extends StatefulWidget {
   @override
@@ -64,7 +66,18 @@ class _CustomListViewState extends State<CustomListView> {
             _saved.add(pair);
           }
         });
+        _pushGrid();;
       },
+    );
+  }
+
+  void _pushGrid() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return CustomGrid();
+        },
+      )
     );
   }
 
