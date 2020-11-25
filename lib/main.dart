@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:zq_flutter_app/ListView.dart';
 void main() {
   runApp(MyApp());
 }
@@ -12,15 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(//MaterialApp是一种标准的移动端和web端的视觉设计语言，Flutter提供了一套丰富的Material widget
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.indigo,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
@@ -38,15 +30,10 @@ class MyApp extends StatelessWidget {
 //1、一个StatefulWidget类
 class RandomWords extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => RandomWordState();
+  State<StatefulWidget> createState() => _RandomWordState();
 }
 //2、一个State类，StatefulWidget类本身是不变的，但是State类在widget生命周期中始终存在
-class RandomWordState extends State<RandomWords> {
-
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18);
-  //_saved集合用来存储用户喜欢（收藏）的单词对，为什么用set而不用list，因为set不允许重复的值
-  final _saved = Set<WordPair>(); //集合
+class _RandomWordState extends State<RandomWords> {
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +63,29 @@ class RandomWordState extends State<RandomWords> {
 
   Widget _titleSection() {
     return Container(
+      //这里的 color 属性和 decoration 中的color属性冲突，不能同时存在
+      // color: Colors.red,
+      //margin：外部间距
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        //container的边框
+        border: Border(
+          // Border各个边的color属性需要是 uniform 的，否则和borderRadius属性同时设置会出现异常
+          top: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
+          left: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
+          bottom: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
+          right: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid)
+        ),
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(10),
+          topLeft: Radius.circular(8),
+          bottomLeft: Radius.circular(6),
+          bottomRight: Radius.circular(15),
+        ),
+      ),
+      //padding：内部间距
       padding: EdgeInsets.all(32),
       child: Row(
         children: [
@@ -137,67 +147,12 @@ class RandomWordState extends State<RandomWords> {
     );
   }
 
-
-  Widget _buildSuggestions() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            //生成10个单词对，然后添加到列表
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-      },
-    );
-  }
-
-  Widget _buildRow(WordPair pair) {
-    final alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: (){
-        //setState()，会为State对象触发 build() 方法,进而导致UI的更新
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
-          }
-        });
-      },
-    );
-  }
-
   //路由推出第二页面
   void _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-
-          final tiles = _saved.map((pair){
-            return ListTile(
-              title: Text(pair.asPascalCase, style: _biggerFont),
-            );
-          });
-
-          final divided = ListTile.divideTiles(tiles: tiles, context: context).toList();
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Saved Suggestions'),
-            ),
-            body: ListView(children: divided),
-          );
-
+          return CustomListView();
         },
       )
     );
