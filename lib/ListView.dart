@@ -66,7 +66,7 @@ class _CustomListViewState extends State<CustomListView> {
             _saved.add(pair);
           }
         });
-        _pushGrid();;
+        _pushGrid();
       },
     );
   }
