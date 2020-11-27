@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       //Scaffold是Material library中提供的一个widget，它提供了默认的导航栏、标题和包含主屏幕widget树的body属性，widget树可以很复杂
-      home: RandomWords(),
+      home: HomePage(),
     );
   }
 }
@@ -27,12 +27,12 @@ class MyApp extends StatelessWidget {
 
 //实现一个stateful widget至少需要两个类
 //1、一个StatefulWidget类
-class RandomWords extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _RandomWordState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 //2、一个State类，StatefulWidget类本身是不变的，但是State类在widget生命周期中始终存在
-class _RandomWordState extends State<RandomWords> {
+class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +100,7 @@ class _RandomWordState extends State<RandomWords> {
               ],
             ),            
           ),
-          Icon(Icons.star, color: Colors.red),
-          Text('44'),
+          FavoriteWidget(),
         ],
       ),
     );
@@ -156,5 +155,56 @@ class _RandomWordState extends State<RandomWords> {
       )
     );
   }
+}
+
+class FavoriteWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _FavoriteWidget();
+  }
+}
+
+class _FavoriteWidget extends State<FavoriteWidget> {
+
+  int _favoriteCount = 41;
+  bool _isFavorited = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: EdgeInsets.all(0.0),
+          child: IconButton(icon: 
+            (_isFavorited 
+            ? Icon(Icons.star, color: Colors.red) 
+            : Icon(Icons.star_border)), 
+          onPressed: _toggleFavorite),
+        ),
+
+        SizedBox(
+          width: 18,
+          child: Container(
+            child: Text('$_favoriteCount'),
+          ),
+        ),
+      ],
+    );
+
+  }
+
+  void _toggleFavorite() {
+    setState(() {
+      if (_isFavorited) {
+        _favoriteCount -= 1;
+        _isFavorited = false;
+      } else {
+        _favoriteCount += 1;
+        _isFavorited = true;
+      }
+    });
+  }
+
 }
 
