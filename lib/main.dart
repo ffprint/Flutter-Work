@@ -34,6 +34,17 @@ class HomePage extends StatefulWidget {
 //2、一个State类，StatefulWidget类本身是不变的，但是State类在widget生命周期中始终存在
 class _HomePageState extends State<HomePage> {
 
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +55,59 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: _buildCustomBody(),
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        child: Container(
+          height: 50,
+        ),
+      ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        tooltip: '这是用来点击的+',
+        child: Icon(Icons.airplanemode_active),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      drawer: Drawer(
+        //elevation：阴影效果大小
+        elevation: 10.0,
+        semanticLabel: 'ssssssss',
+        child: Builder(builder: (BuildContext context){
+          return ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header', style: TextStyle(color: Colors.white, fontSize: 24),),
+            ),
+            ListTile(
+              onTap: (){
+                _showSnackbar(context);
+              },              
+              leading: Icon(Icons.message),
+              title: Text('Message', style: TextStyle(fontSize: 18),),
+            ),
+            ListTile(
+              onTap: () => {
+                _showBottomSheet(context)
+              },
+              leading: Icon(Icons.settings),
+              title: Text('Settings', style: TextStyle(fontSize: 18),),
+            ),
+            ListTile(
+              onTap: () => {
+                print("点击了Profile")
+              },
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile', style: TextStyle(fontSize: 18),),
+            ),
+          ],
+          );
+        }),
+        
+      ),
     );
   }
 
@@ -58,6 +122,25 @@ class _HomePageState extends State<HomePage> {
         _textSection()
       ],
     );
+  }
+
+  //底部弹窗snackBar
+  void _showSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('点击了Message'),
+      duration: Duration(seconds: 2),
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  //底部弹出sheet
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(context: context, builder: (BuildContext context){
+      return Container(
+        height: 200.0,
+        child: Image.asset('images/lake.jpg', fit: BoxFit.cover,),
+      );
+    });
   }
 
   Widget _titleSection() {
@@ -140,7 +223,7 @@ class _HomePageState extends State<HomePage> {
         '''Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. 
         Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. 
         A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. 
-        Activities enjoyed here include rowing, and riding the summer toboggan run.''', 
+        Activities enjoyed here include rowing, and riding the summer toboggan run. ''', 
         softWrap: true, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
     );
   }
@@ -193,7 +276,7 @@ class _FavoriteWidget extends State<FavoriteWidget> {
     );
 
   }
-
+  
   void _toggleFavorite() {
     setState(() {
       if (_isFavorited) {
