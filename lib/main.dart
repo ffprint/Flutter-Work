@@ -68,6 +68,11 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.airplanemode_active),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // drawerScrimColor: 抽屉侧边栏
+      drawerScrimColor: Colors.yellow,
+      backgroundColor: Colors.white,
+      // extendBodyBehindAppBar: true,
+      // extendBody: true,
       drawer: Drawer(
         //elevation：阴影效果大小
         elevation: 10.0,
@@ -76,12 +81,43 @@ class _HomePageState extends State<HomePage> {
           return ListView(
           padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            UserAccountsDrawerHeader(
+              margin: EdgeInsets.only(bottom: 10.0),
+              accountName: Text('Bob', style: TextStyle(fontSize: 24, color: Colors.white,)), 
+              accountEmail: Text('email: 1234567@qq.com', style: TextStyle(fontSize: 20, color: Colors.white)),
+              currentAccountPicture: Container(
+                // padding: EdgeInsets.only(bottom: 12.0),
+                // margin: EdgeInsets.only(top: 10),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage("https://t7.baidu.com/it/u=3616242789,1098670747&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg"),
+                ),
               ),
-              child: Text('Drawer Header', style: TextStyle(color: Colors.white, fontSize: 24),),
+              otherAccountsPictures: [
+                CircleAvatar(
+                  // child: Icon(Icons.access_time),
+                  backgroundImage: NetworkImage("https://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg"),
+                ),
+                CircleAvatar(
+                  backgroundImage: NetworkImage("http://b-ssl.duitang.com/uploads/item/201707/01/20170701155239_2E8zH.jpeg"),
+                ),
+              ],
+              decoration: BoxDecoration(
+                color: Colors.red
+              ),
             ),
+            // DrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color: Colors.blue,
+            //   ),
+            //   child: Text('Drawer Header', style: TextStyle(color: Colors.white, fontSize: 24),),
+            // ),
+            // Divider(
+            //   height: 2,
+            //   thickness: 2.0,
+            //   indent: 0,
+            //   endIndent: 0,
+            //   color: Colors.blue,
+            // ),
             ListTile(
               onTap: (){
                 _showSnackbar(context);
@@ -98,7 +134,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               onTap: () => {
-                print("点击了Profile")
+                _showAboutDialog(context)
               },
               leading: Icon(Icons.account_circle),
               title: Text('Profile', style: TextStyle(fontSize: 18),),
@@ -106,8 +142,21 @@ class _HomePageState extends State<HomePage> {
           ],
           );
         }),
-        
       ),
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text('Drawer End', style: TextStyle(fontSize: 24, color: Colors.white)),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            )
+          ],
+        ),
+      ),
+      endDrawerEnableOpenDragGesture: true,
     );
   }
 
@@ -136,11 +185,21 @@ class _HomePageState extends State<HomePage> {
   //底部弹出sheet
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(context: context, builder: (BuildContext context){
+      //这里可以放其他自定义widget
       return Container(
         height: 200.0,
         child: Image.asset('images/lake.jpg', fit: BoxFit.cover,),
       );
     });
+  }
+
+  void _showAboutDialog(BuildContext context) {
+    showAboutDialog(
+      context: context,
+      applicationVersion: '2.0.1',
+      applicationIcon: Icon(Icons.accessibility),
+      applicationName: 'you app',
+    );
   }
 
   Widget _titleSection() {
@@ -223,7 +282,7 @@ class _HomePageState extends State<HomePage> {
         '''Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese Alps. 
         Situated 1,578 meters above sea level, it is one of the larger Alpine Lakes. 
         A gondola ride from Kandersteg, followed by a half-hour walk through pastures and pine forest, leads you to the lake, which warms to 20 degrees Celsius in the summer. 
-        Activities enjoyed here include rowing, and riding the summer toboggan run. ''', 
+        Activities enjoyed here include rowing, and riding the summer toboggan run.''', 
         softWrap: true, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 15)),
     );
   }
