@@ -5,6 +5,10 @@ import 'package:zq_flutter_app/GridView.dart';
 
 
 class CustomListView extends StatefulWidget {
+
+  const CustomListView({Key key, this.title}) : super(key: key);
+  final String title;
+
   @override
   State<StatefulWidget> createState() {
     return _CustomListViewState();
@@ -22,7 +26,7 @@ class _CustomListViewState extends State<CustomListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Suggestions List'),
+        title: Text(widget.title),
         actions: <Widget> [
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],

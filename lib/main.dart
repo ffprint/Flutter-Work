@@ -9,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(//MaterialApp是一种标准的移动端和web端的视觉设计语言，Flutter提供了一套丰富的Material widget
+    //MaterialApp是一种标准的移动端和web端的视觉设计语言，Flutter提供了一套丰富的Material widget
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.indigo,
@@ -20,6 +21,27 @@ class MyApp extends StatelessWidget {
       ),
       //Scaffold是Material library中提供的一个widget，它提供了默认的导航栏、标题和包含主屏幕widget树的body属性，widget树可以很复杂
       home: HomePage(),
+      initialRoute: 'home',
+      //注册路由表，可以通过路由名称来打开新路由
+      routes: {
+        // "new_page":(context) => NewPage(),
+        // "home":(context) => MyApp(),//home路由
+        // "suggestions_list":(context) => CustomListView(title: 'haiya',),//CustomListView 路由
+        
+      },
+      
+      //钩子
+      //onGenerateRoute，当使用Navigatior.pushNamed()来打开命名路由时，如果指定的路由名在上面的路由表中已经注册，则会调用
+      //路由表中的builder来生成路由组件；如果没有注册，就会调用onGenerateRoute来生成路由
+      // onGenerateRoute: (RouteSettings settings){
+      //   return MaterialPageRoute(builder: (context){
+      //     String routeName = settings.name;
+
+      //     //如果访问的路由需要登录，但当前未登录，则直接返回登录页路由
+      //     //引导用户登录，其他情况正常打开路由
+
+      //   });
+      // },
     );
   }
 }
@@ -68,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.airplanemode_active),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // drawerScrimColor: 抽屉侧边栏
+      // drawerScrimColor: 抽屉侧边栏外部颜色
       drawerScrimColor: Colors.yellow,
       backgroundColor: Colors.white,
       // extendBodyBehindAppBar: true,
@@ -84,7 +106,7 @@ class _HomePageState extends State<HomePage> {
             UserAccountsDrawerHeader(
               margin: EdgeInsets.only(bottom: 10.0),
               accountName: Text('Bob', style: TextStyle(fontSize: 24, color: Colors.white,)), 
-              accountEmail: Text('email: 1234567@qq.com', style: TextStyle(fontSize: 20, color: Colors.white)),
+              accountEmail: Text('email: 1234567@qq.com', style: TextStyle(fontSize: 18, color: Colors.white)),
               currentAccountPicture: Container(
                 // padding: EdgeInsets.only(bottom: 12.0),
                 // margin: EdgeInsets.only(top: 10),
@@ -101,6 +123,7 @@ class _HomePageState extends State<HomePage> {
                   backgroundImage: NetworkImage("http://b-ssl.duitang.com/uploads/item/201707/01/20170701155239_2E8zH.jpeg"),
                 ),
               ],
+              onDetailsPressed: (){},
               decoration: BoxDecoration(
                 color: Colors.red
               ),
@@ -168,7 +191,42 @@ class _HomePageState extends State<HomePage> {
         Image.asset('images/lake.jpg',width: 600,height: 240, fit: BoxFit.cover,),
         _titleSection(),
         _buttonSection(),
-        _textSection()
+        _textSection(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ActionChip(
+             avatar: CircleAvatar(
+              backgroundColor: Colors.grey.shade800,
+              child: Text('AB'),
+             ),
+             label: Text('Aaron Burr'),
+             onPressed: () {
+              print("If you stand for nothing, Burr, what’ll you fall for?");
+             }
+            ),
+            ActionChip(
+             avatar: CircleAvatar(
+              backgroundColor: Colors.grey.shade800,
+              child: Text('AB'),
+             ),
+             label: Text('Aaron Burr'),
+             onPressed: () {
+              print("If you stand for nothing, Burr, what’ll you fall for?");
+             }
+            ),
+            ActionChip(
+             avatar: CircleAvatar(
+              backgroundColor: Colors.grey.shade800,
+              child: Text('AB'),
+             ),
+             label: Text('Aaron Burr'),
+             onPressed: () {
+              print("If you stand for nothing, Burr, what’ll you fall for?");
+             }
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -213,17 +271,30 @@ class _HomePageState extends State<HomePage> {
         //container的边框
         border: Border(
           // Border各个边的color属性需要是 uniform 的，否则和borderRadius属性同时设置会出现异常
-          top: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
-          left: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
-          bottom: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid),
-          right: BorderSide(color: Colors.teal[200], width: 5, style: BorderStyle.solid)
+          top: BorderSide(color: Colors.teal[200], width: 10, style: BorderStyle.solid),
+          left: BorderSide(color: Colors.teal[200], width: 10, style: BorderStyle.solid),
+          bottom: BorderSide(color: Colors.teal[200], width: 10, style: BorderStyle.solid),
+          right: BorderSide(color: Colors.teal[200], width: 10, style: BorderStyle.solid)
         ),
-        color: Colors.white,
+
+        // BorderDirectional：可以单独分开设置四个边框
+        // BorderDirectional(
+        //   start: BorderSide(
+        //     color: Colors.red,
+        //     width: 10.0,
+        //   ),
+        //   end: BorderSide(
+        //     color: Colors.cyan,
+        //     width: 10.0
+        //   ),
+        // ),
+        
+        color: Colors.blue,
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(10),
-          topLeft: Radius.circular(8),
-          bottomLeft: Radius.circular(6),
-          bottomRight: Radius.circular(15),
+          topLeft: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10),
         ),
       ),
       //padding：内部间距
@@ -290,12 +361,24 @@ class _HomePageState extends State<HomePage> {
   //路由推出第二页面
   void _pushSaved() {
     Navigator.of(context).push(
+      //MaterialPageRoute，表示占有整个屏幕空间的一个模态路由页面，还定义了路由构建及切换时过渡动画的相关接口及属性
+      //不同平台切换表现不一样,如果想要自定义路由切换，可以自己继承 PageRoute 来实现
       MaterialPageRoute(
+        //ios下，从下面弹出页面
+        fullscreenDialog: true,
+        //默认情况下，当入栈一个新路由时，原来的路由仍然会被保存在内存中，如果想在路由没用的时候释放其所占用的所有资源可以设置为false
+        maintainState: true,
         builder: (context) {
-          return CustomListView();
+          return CustomListView(
+            //路由传值
+            title: 'Suggestions 列表',
+          );
         },
       )
     );
+
+    // Navigator.pushNamed(context, 'suggestions_list');
+
   }
 }
 
@@ -308,7 +391,7 @@ class FavoriteWidget extends StatefulWidget {
 
 class _FavoriteWidget extends State<FavoriteWidget> {
 
-  int _favoriteCount = 41;
+  int _favoriteCount = 0;
   bool _isFavorited = true;
 
   @override
@@ -318,17 +401,39 @@ class _FavoriteWidget extends State<FavoriteWidget> {
       children: [
         Container(
           padding: EdgeInsets.all(0.0),
-          child: IconButton(icon: 
-            (_isFavorited 
-            ? Icon(Icons.star, color: Colors.red) 
-            : Icon(Icons.star_border)), 
-          onPressed: _toggleFavorite),
+          child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 500),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(child: child, opacity: animation);
+              },
+              child: Text('$_favoriteCount',style: TextStyle(fontSize: 20),),
+          )
         ),
-
+          // RaisedButton(
+          //   child: const Text('+1'),
+          //   onPressed: () {
+          //     setState(() {
+          //       _favoriteCount += 1;
+          //     });
+          //   },
+          // )
+        //   IconButton(icon: 
+        //     (_isFavorited 
+        //     ? Icon(Icons.star, color: Colors.red) 
+        //     : Icon(Icons.star_border)), 
+        //   onPressed: _toggleFavorite),
+        // ),
+        
         SizedBox(
-          width: 18,
+          width: 30,
           child: Container(
-            child: Text('$_favoriteCount'),
+            child: AnimatedSwitcher(
+              duration: Duration(milliseconds: 500),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(child: child, opacity: animation);
+              },
+              child: Text('$_favoriteCount', style: TextStyle(fontSize: 20)),
+            ),
           ),
         ),
       ],
