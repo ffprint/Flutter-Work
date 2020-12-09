@@ -1,7 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:zq_flutter_app/ListView.dart';
 void main() {
-  runApp(MyApp());
+  //debug开头的调试语句，只能在debug模式下使用
+  //可视化调试布局
+  // debugPaintSizeEnabled = true;
+  
+  // 具有基线的对象，比如文字基线，会显示出来
+  debugPaintBaselinesEnabled = true;
+
+  //调试合成图层，true，该标志用橙色或者轮廓线标注出每个层的边界,点击时也会显示响应区域
+  debugPaintPointersEnabled = true;
+
+  //或者使用该标志，重绘时，会是该层被一组旋转色所覆盖
+  // debugRepaintRainbowEnabled = true;
+
+
+  //runZoned()方法，可以给执行对象指定一个Zone，相当于一个代码执行沙箱，不同沙箱之间是隔离的。
+  //沙箱是可以获取、拦截或者修改一些diamante行为，例如在Zone中可以捕获日志输出、Timer创建，微任务调度等
+  //沙箱也可以捕获所有未处理的异常
+  //ZoneSpecification还可以定义一些其他行为
+  runZoned(()=> runApp(MyApp()), zoneSpecification: ZoneSpecification(
+    print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      parent.print(zone, 'intercepted: $line');
+    })
+  );
+  // runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -360,6 +386,22 @@ class _HomePageState extends State<HomePage> {
 
   //路由推出第二页面
   void _pushSaved() {
+    //这个方法会打印出widget树的结构
+    // debugDumpApp();
+
+    //这个方法打印渲染树
+    // debugDumpRenderTree();
+
+    //打印Layer树，可以理解为渲染树的一层
+    // debugDumpLayerTree();
+
+    //语义树（呈现给系统可访问性API的树）
+    // debugDumpSemanticsTree();
+
+    //调度，帧
+    // debugPrintBeginFrameBanner; //帧开始事件发生的位置 bool
+    // debugPrintEndFrameBanner; //帧结束时间发生的位置 bool
+
     Navigator.of(context).push(
       //MaterialPageRoute，表示占有整个屏幕空间的一个模态路由页面，还定义了路由构建及切换时过渡动画的相关接口及属性
       //不同平台切换表现不一样,如果想要自定义路由切换，可以自己继承 PageRoute 来实现
