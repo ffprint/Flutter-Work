@@ -9,7 +9,7 @@ void main() {
   // debugPaintSizeEnabled = true;
   
   // 具有基线的对象，比如文字基线，会显示出来
-  debugPaintBaselinesEnabled = true;
+  // debugPaintBaselinesEnabled = true;
 
   //调试合成图层，true，该标志用橙色或者轮廓线标注出每个层的边界,点击时也会显示响应区域
   debugPaintPointersEnabled = true;
