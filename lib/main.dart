@@ -12,7 +12,7 @@ void main() {
   // debugPaintBaselinesEnabled = true;
 
   //调试合成图层，true，该标志用橙色或者轮廓线标注出每个层的边界,点击时也会显示响应区域
-  debugPaintPointersEnabled = true;
+  // debugPaintPointersEnabled = true;
 
   //或者使用该标志，重绘时，会是该层被一组旋转色所覆盖
   // debugRepaintRainbowEnabled = true;
